@@ -22,7 +22,6 @@ double CalculateY(double x, int n) {
             double numerator = 2.0 * pow(x, 2) - x * (double)i;
             product_result *= (numerator / (double)i);
         }
-
         y = product_result + 7.0 * x;
     }
     else {
@@ -44,7 +43,6 @@ double CalculateY(double x, int n) {
 
         y = fractional_term + nested_sum;
     }
-
     return y;
 }
 
@@ -182,7 +180,6 @@ int main() {
             cout << setw(5) << "k" << setw(15) << "x" << setw(20) << "Y(x)" << endl;
             cout << "------------------------------------------\n";
 
-
             int k = 1;
             const double epsilon = 1e-9;
 
@@ -207,6 +204,5 @@ int main() {
             break;
         }
     } while (choice != 3);
-
     return 0;
 }
