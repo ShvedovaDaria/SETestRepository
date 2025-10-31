@@ -4,7 +4,7 @@
 #include <limits>
 using namespace std;
 
-// github testing commit
+// github test
 
 void ClearInput() {
     if (cin.fail()) {
