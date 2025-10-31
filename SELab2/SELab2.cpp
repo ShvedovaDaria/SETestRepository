@@ -15,6 +15,7 @@ void ClearInput() {
 }
 
 
+
 double CalculateY(double x, int n) {
     double y = 0.0;
 
