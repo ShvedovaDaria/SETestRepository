@@ -4,6 +4,8 @@
 #include <limits>
 using namespace std;
 
+//code testing
+
 void ClearInput() {
     if (cin.fail()) {
         cerr << "--- INPUT ERROR ---: Please enter a number, not text or symbols.\n";
