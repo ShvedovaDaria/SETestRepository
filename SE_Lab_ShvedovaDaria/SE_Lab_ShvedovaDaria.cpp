@@ -48,6 +48,8 @@ double CalculateY(double x, int n) {
     return y;
 }
 
+//main
+
 int main() {
     int choice = 0;
     int n = 0;
