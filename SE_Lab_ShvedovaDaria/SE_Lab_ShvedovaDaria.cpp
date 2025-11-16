@@ -2,9 +2,17 @@
 #include <cmath>
 #include <iomanip>
 #include <limits>
+#include <stdexcept>
+#include <string>
+#include <cctype>
 using namespace std;
 
 //code test in github test
+
+class InputValidationException : public std::runtime_error {
+public:
+    InputValidationException(const std::string& msg) : std::runtime_error(msg) {}
+};
 
 void ClearInput() {
     if (cin.fail()) {
@@ -48,7 +56,7 @@ double CalculateY(double x, int n) {
     return y;
 }
 
-//main
+//main function
 
 int main() {
     int choice = 0;
@@ -90,35 +98,48 @@ int main() {
         switch (choice) {
         case 1: {
             cout << "\n--- Option 1: Single X Calculation ---\n";
+            bool success = false;
 
             do {
-                cout << "Enter integer n (must be > 4): ";
-                if (!(cin >> n)) {
-                    cerr << "--- INPUT ERROR ---: n must be a whole number, not a decimal or text.\n";
-                    cin.clear();
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    n = 0;
-                }
-                else {
+                try {
+                    cout << "Enter integer n (must be > 4): ";
+                    if (!(cin >> n)) {
+                        throw InputValidationException("n must be a whole number, not text or symbols.");
+                    }
+
                     char next_char;
-                    if (cin.get(next_char) && next_char != '\n' && !isspace(next_char)) {
-                        cerr << "--- INPUT ERROR ---: n must be a whole number (integer), not a decimal.\n";
-                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        n = 0;
+                    cin.get(next_char);
+                    if (next_char != '\n' && !isspace(next_char)) {
+                        throw InputValidationException("n must be a whole number (integer), not a decimal.");
                     }
-                    else if (n <= 4 && n != 0) {
-                        cerr << "--- INPUT ERROR ---: n must be greater than 4.\n";
+                    if (n <= 4) {
+                        throw InputValidationException("n must be greater than 4.");
                     }
+                    success = true;
                 }
-            } while (n <= 4);
+                catch (const InputValidationException& e) {
+                    cerr << "--- LOGIC/INPUT ERROR ---: " << e.what() << endl;
+                    ClearInput();
+                    success = false;
+                }
+            } while (!success);
 
-
-            cout << "Enter real number x: ";
-            while (!(cin >> single_x)) {
-                ClearInput();
-                cout << "Enter real number x: ";
-            }
-            ClearInput();
+            success = false;
+            do {
+                try {
+                    cout << "Enter real number x: ";
+                    if (!(cin >> single_x)) {
+                        throw InputValidationException("x must be a real number, not text or symbols.");
+                    }
+                    ClearInput();
+                    success = true;
+                }
+                catch (const InputValidationException& e) {
+                    cerr << "--- LOGIC/INPUT ERROR ---: " << e.what() << endl;
+                    ClearInput();
+                    success = false;
+                }
+            } while (!success);
 
             double y = CalculateY(single_x, n);
 
@@ -126,77 +147,107 @@ int main() {
             cout << "\n--- Calculation Result ---\n";
             cout << "For n = " << n << " and x = " << single_x << endl;
             cout << "Y = " << y << endl;
+            
             break;
         }
 
         case 2: {
             cout << "\n--- Option 2: Range Calculation ---\n";
+            bool success;
 
             do {
-                cout << "Enter integer n (must be > 4): ";
-                if (!(cin >> n)) {
-                    cerr << "--- INPUT ERROR ---: n must be a whole number, not a decimal or text.\n";
-                    cin.clear();
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    n = 0;
-                }
-                else {
+                success = true;
+                try {
+                    cout << "Enter integer n (must be > 4): ";
+                    if (!(cin >> n)) {
+                        throw InputValidationException("n must be a whole number, not text or symbols.");
+                    }
+
                     char next_char;
-                    if (cin.get(next_char) && next_char != '\n' && !isspace(next_char)) {
-                        cerr << "--- INPUT ERROR ---: n must be a whole number (integer), not a decimal.\n";
-                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                        n = 0;
+                    cin.get(next_char);
+                    if (next_char != '\n' && !isspace(next_char)) {
+                        throw InputValidationException("n must be a whole number (integer), not a decimal.");
                     }
-                    else if (n <= 4 && n != 0) {
-                        cerr << "--- INPUT ERROR ---: n must be greater than 4.\n";
+
+                    if (n <= 4) {
+                        throw InputValidationException("n must be greater than 4.");
                     }
                 }
-            } while (n <= 4);
-
-
-            cout << "Enter starting range value (a): ";
-            while (!(cin >> a)) { ClearInput(); cout << "Enter starting range value (a): "; }
-            ClearInput();
+                catch (const InputValidationException& e) {
+                    cerr << "--- LOGIC/INPUT ERROR ---: " << e.what() << endl;
+                    ClearInput();
+                    success = false;
+                }
+            } while (!success);
 
             do {
-                cout << "Enter ending range value (b): ";
-                while (!(cin >> b)) { ClearInput(); cout << "Enter ending range value (b): "; }
-                ClearInput();
-
-                if (b <= a) {
-                    cerr << "--- INPUT ERROR ---: Ending value 'b' must be bigger than starting value 'a'.\n";
+                success = true;
+                try {
+                    cout << "Enter starting range value (a): ";
+                    if (!(cin >> a)) { throw InputValidationException("a must be a real number, not a text or a symbols."); }
+                    ClearInput();
                 }
-            } while (b <= a);
-
-            cout << "Enter step size (must be > 0): ";
-            while (!(cin >> step) || step <= 0.0) {
-                ClearInput();
-                if (step <= 0.0) {
-                    cerr << "--- INPUT ERROR ---: Step size must be positive.\n";
+                catch (const InputValidationException& e) {
+                    cerr << "--- LOGIC/INPUT ERROR ---: " << e.what() << endl;
+                    ClearInput();
+                    success = false;
                 }
-                cout << "Enter step size (must be > 0): ";
+			} while (!success);
+
+            do {
+                success = true;
+                try {
+                    cout << "Enter ending range value (b): ";
+                    if (!(cin >> b)) { throw InputValidationException("b must be a real number, not a text or a symbols."); }
+                    ClearInput();
+                    if (b <= a) {
+                        throw InputValidationException("Ending value b must be bigger than startinf value a.");
+                    }
+                }
+                catch (const InputValidationException& e) {
+                    cerr << "--- LOGIC/INPUT ERROR ---: " << e.what() << endl;
+                    ClearInput();
+                    success = false;
+                }
+			} while (!success);
+
+            do {
+                success = true;
+                try {
+                    cout << "Enter step size (must be > 0): ";
+                    if (!(cin >> step)) { throw InputValidationException("Step size must be a real number, not text or symbols."); }
+                    ClearInput();
+                    if (step <= 0.0) {
+                        throw InputValidationException("Step size must be positive.");
+                    }
+                }
+                catch (const InputValidationException& e) {
+                    cerr << "--- LOGIC/INPUT ERROR ---: " << e.what() << endl;
+                    ClearInput();
+                    success = false;
+                    }
+                } while (!success);
+				
+
+                cout << "\nCalculation Results (n = " << n << ")\n";
+                cout << fixed << setprecision(6);
+                cout << "------------------------------------------\n";
+                cout << setw(5) << "k" << setw(15) << "x" << setw(20) << "Y(x)" << endl;
+                cout << "------------------------------------------\n";
+
+                int k = 1;
+                const double epsilon = 1e-9;
+
+                for (double current_x = a; current_x <= b + epsilon; current_x += step) {
+                    double y_range = CalculateY(current_x, n);
+
+                    cout << setw(5) << k << setw(15) << current_x << setw(20) << y_range << endl;
+                    k++;
+                }
+                cout << "------------------------------------------\n";
+                cout << "Range calculation complete.\n";
+                break;
             }
-            ClearInput();
-
-            cout << "\nCalculation Results (n = " << n << ")\n";
-            cout << fixed << setprecision(6);
-            cout << "------------------------------------------\n";
-            cout << setw(5) << "k" << setw(15) << "x" << setw(20) << "Y(x)" << endl;
-            cout << "------------------------------------------\n";
-
-            int k = 1;
-            const double epsilon = 1e-9;
-
-            for (double current_x = a; current_x <= b + epsilon; current_x += step) {
-                double y_range = CalculateY(current_x, n);
-
-                cout << setw(5) << k << setw(15) << current_x << setw(20) << y_range << endl;
-                k++;
-            }
-            cout << "------------------------------------------\n";
-            cout << "Range calculation complete.\n";
-            break;
-        }
 
         case 3:
             cout << "Exiting program... \n";
