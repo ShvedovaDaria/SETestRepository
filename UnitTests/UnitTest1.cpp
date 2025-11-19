@@ -2,6 +2,7 @@
 #include "CppUnitTest.h"
 #include "C:\Users\admin\source\repos\Test\SE_Lab_ShvedovaDaria\SE_Lab_ShvedovaDaria.cpp"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
 namespace UnitTests 
 {
 TEST_CLASS(CalculationTest) 
