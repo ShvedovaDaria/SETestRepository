@@ -21,12 +21,12 @@ TEST_CLASS(CalculationTest)
 
 		TEST_METHOD(CalculateY_Xgreaterthanone)
 		{
-			double x = 0.0;
+			double x = 2.0;
 			int n = 6;
-			double expected = 1.5;
+			double expected = 5.5;
 			double result = CalculateY(x, n);
 
-			Assert::AreEqual(expected, result, 0.0001, L"Test failed for x = 0.0.");
+			Assert::AreEqual(expected, result, 0.0001, L"Test failed for x = 2.0.");
 		}
 
 		TEST_METHOD(CalculateY_Xequalsone)
